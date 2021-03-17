@@ -151,16 +151,25 @@ def write_to_file(list, filename="out"):
     with open(filename + ".csv", 'w', newline='') as myfile:
      wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
      wr.writerow(list)
+     print("Written data to " + filename + ".csv")
 
 if __name__=="__main__":
-    if len(sys.argv) < 3:
-        print("usage: asahi-scraper <username> <passwd> <file_name>")
+    if len(sys.argv) < 2:
+        print("usage: asahi-scraper <username> <passwd> optional:<file_name>")
         exit(1)
 
     username = sys.argv[1]
     passwd = sys.argv[2]
     
     search_query = "国産"
+    lookup_range = [2020, 2021]
 
-    dates = parse_dates(username, passwd, search_query, range=[2020, 2021])
-    write_to_file(dates, filename=sys.argv[3])
+    dates = parse_dates(username, passwd, search_query, range=lookup_range)
+    
+    if len(sys.argv) > 2:
+        write_to_file(dates, filename=sys.argv[3])
+    else:
+        write_to_file(dates)
+    
+    exit(0)
+    
