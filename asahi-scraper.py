@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+# LICENSE: MIT
+# Author: Zohar Cochavi
+# email: zohar.cochavi@gmail.com
+
 import re
 import sys
 import csv
