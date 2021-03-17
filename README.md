@@ -6,3 +6,8 @@ This is simply there for the sake of reference for the paper this has been used 
 
 Author: Zohar Cochavi
 
+Used Packages:
+
+- selenium
+- sys
+- re
