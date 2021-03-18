@@ -1,17 +1,14 @@
 #!/usr/bin/python
 
-# LICENSE: MIT
-# Author: Zohar Cochavi
-# email: zohar.cochavi@gmail.com
-
 import re
 import sys
 import csv
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains 
 from selenium.common.exceptions import NoSuchElementException
-       
-def parse_dates(username, passwd, search_query, range=[1984, 2021]):
+
+
+def parse_dates(filename, username, passwd, search_query, range=[1984, 2021]):
     url = 'https://login.ezproxy.leidenuniv.nl/login?qurl=http://database.asahi.com%2findex.shtml'
 
     # Start
@@ -97,7 +94,11 @@ def parse_dates(username, passwd, search_query, range=[1984, 2021]):
     # Regex expression for extracting dates
     page = 1
     date_expression = '([0-9]{4}).+?([0-9]{2}).+?([0-9]{2}).+?'
-    dates = []
+
+    # Open output file
+    myfile = open(filename + ".csv", 'a', newline='')
+    print("Opened file: " + filename + ".csv")
+    file_writer = csv.writer(myfile, quoting=csv.QUOTE_ALL)
 
     # Now cycle through the pages and extract the dates
     while True:
@@ -112,17 +113,18 @@ def parse_dates(username, passwd, search_query, range=[1984, 2021]):
         date_text_list = map(lambda e : e.text, date_elements)
 
         # Look through our list for matches
-        current_dates = []
+        dates = []
 
         for text in date_text_list:
             match = re.match(date_expression, text)
             # If it matches, format and append
             if match:
-                current_dates.append(match.group(3) + "-" + match.group(2) + "-" + match.group(1))
+                dates.append(match.group(3) + "-" + match.group(2) + "-" + match.group(1))
 
-        # Feedback
-        print(current_dates, "\n")
-        dates += current_dates
+        # Write matches to file
+        print("Appending to file...")
+        print(dates, "\n")
+        file_writer.writerow(dates)
        
         # Try to get next page
         next = getNext(driver)
@@ -135,7 +137,6 @@ def parse_dates(username, passwd, search_query, range=[1984, 2021]):
         page += 1
         next.click()
 
-    return dates
 
 def getNext(driver):
     next = None
@@ -147,11 +148,13 @@ def getNext(driver):
     finally:
         return next
 
-def write_to_file(list, filename="out"):
+
+def create_file(filename="out"):
     with open(filename + ".csv", 'w', newline='') as myfile:
-     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-     wr.writerow(list)
-     print("Written data to " + filename + ".csv")
+     print("Created " + filename + ".csv")
+
+    return filename
+
 
 if __name__=="__main__":
     if len(sys.argv) < 2:
@@ -163,13 +166,16 @@ if __name__=="__main__":
     
     search_query = "国産"
     lookup_range = [2020, 2021]
-
-    dates = parse_dates(username, passwd, search_query, range=lookup_range)
+    
+    file = None
+    filename = None
     
     if len(sys.argv) > 2:
-        write_to_file(dates, filename=sys.argv[3])
+        filename = create_file(filename=sys.argv[3])
     else:
-        write_to_file(dates)
+        filename = create_file()
+
+    parse_dates(filename, username, passwd, search_query, range=lookup_range)
     
     exit(0)
     
