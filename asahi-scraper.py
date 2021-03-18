@@ -170,7 +170,7 @@ if __name__=="__main__":
     file = None
     filename = None
     
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 3:
         filename = create_file(filename=sys.argv[3])
     else:
         filename = create_file()
