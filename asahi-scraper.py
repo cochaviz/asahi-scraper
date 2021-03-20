@@ -165,7 +165,7 @@ if __name__=="__main__":
     passwd = sys.argv[2]
     
     search_query = "国産"
-    lookup_range = [2020, 2021]
+    lookup_range = [1984, 2021]
     
     file = None
     filename = None
