@@ -157,7 +157,7 @@ def getNext(driver):
 
 
 def create_file(filename="out"):
-    with open(filename + ".csv", 'w', newline='') as myfile:
+    with open(filename + ".csv", 'w', newline='', encoding="utf8") as myfile:
      print("Created " + filename + ".csv")
 
     return filename
