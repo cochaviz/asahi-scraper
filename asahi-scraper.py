@@ -108,9 +108,11 @@ def parse_dates(filename, username, passwd, search_query, range=[1984, 2021]):
 
         # Get elements
         date_elements = driver.find_elements_by_xpath("//td[@class='topic-list']")
+        title_elements = driver.find_elements_by_xpath("//td[@class='topic-list2']")
         
         # Collapse the list
         date_text_list = map(lambda e : e.text, date_elements)
+        titles = list(map(lambda e : e.text, title_elements))
 
         # Look through our list for matches
         dates = []
@@ -121,10 +123,15 @@ def parse_dates(filename, username, passwd, search_query, range=[1984, 2021]):
             if match:
                 dates.append(match.group(3) + "-" + match.group(2) + "-" + match.group(1))
 
+        if not len(titles) == len(dates):
+            print("Non-matching titles and dates")
+            exit(1)
+
         # Write matches to file
         print("Appending to file...")
         print(dates, "\n")
-        file_writer.writerow(dates)
+        print(titles, "\n")
+        file_writer.writerows(zip(titles,dates))
        
         # Try to get next page
         next = getNext(driver)

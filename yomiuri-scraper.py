@@ -42,6 +42,8 @@ def parse_dates(filename, username, passwd, search_query):
     # --- yomiuri ---
     print("Entered yomiuri!")
 
+    print("Entering query...")
+
     # Yomiuri uses iframes for each of the web elements, bruh
     search_iframe_name = 'frame_bun'
     search_iframe = driver.find_element_by_name(search_iframe_name)
@@ -51,13 +53,16 @@ def parse_dates(filename, username, passwd, search_query):
     login_xpath = '//*[@id="btnEnglish"]/a'
     login_button = driver.find_element_by_xpath(login_xpath)
     login_button.click()
-  
-    # 1986 onwards
-    login_xpath = '/html/body/div[2]/div[4]/div/ul/li[4]/a'
-    login_button = driver.find_element_by_xpath(login_xpath)
-    login_button.click()
 
-    print("Entering query...")
+    # 1986 onwards
+    onwards_xpath = '/html/body/div[2]/div[4]/div/ul/li[4]/a'
+    onwards_button = driver.find_element_by_xpath(onwards_xpath)
+    onwards_button.click()
+
+    # Yomiuri uses iframes for each of the web elements, bruh
+    search_iframe_xpath = '/html/frameset/frame'
+    search_iframe = driver.find_element_by_xpath(search_iframe_xpath)
+    driver.switch_to.frame(search_iframe)
 
     # Enter query
     query_field= driver.find_element_by_id('txtWord_ID')
