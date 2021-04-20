@@ -69,7 +69,7 @@ def parse_dates(filename, username, passwd, search_query, range=[1984, 2021]):
     advanced_search.click()
 
     # Only scan title and contents
-    select_article_name_and_content = driver.find_element_by_id('rdoSrchItem2')
+    select_article_name_and_content = driver.find_element_by_id('rdoSrchItem3')
     select_article_name_and_content.click()
     
     # Set range (1984-2021)
